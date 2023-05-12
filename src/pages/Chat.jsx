@@ -2,8 +2,9 @@ import { useState } from "react";
 import CreateChat from "../component/chat/CreateChat";
 
 
-import UserChatsAndUserForkChats from "../component/chat/UserChatsAndUserForkChats";
 import UserProfile, { ApiModal } from "../component/chat/UserProfile";
+import UserChats from "../component/chat/UserChats";
+import UserForkChats from "../component/chat/UserForkChats";
 
 
 const NavBar = () => {
@@ -48,6 +49,7 @@ const NavBar = () => {
 };
 
 const Chat = () => {
+  const [currentNavbarTab, setCurrentNavbarTab] = useState("chats")
   const chats = [
     {
       role: "user",
@@ -85,7 +87,7 @@ const Chat = () => {
           {chats.map((chat, key) => (
             <div>
             <div
-              className={`w-full px-10 py-5 flex flex-row  ${chat["role"]==="user"? "bg-base-100": "bg-primary bg-opacity-75"}`}
+              className={`w-full px-10 py-5 flex flex-row  ${chat["role"]==="user"? "bg-base-100": "bg-primary bg-opacity-30"}`}
               key={key}
             >
              <div className={`flex flex-row gap-5 leading-relaxed `}>
@@ -127,7 +129,23 @@ const Chat = () => {
             </h1>
           </div>
 
-          <UserChatsAndUserForkChats />
+          <div className="flex flex-col items-center ">
+          <div className="tabs tabs-boxed ">
+            <a 
+            onClick={()=>setCurrentNavbarTab("chats")}
+            className={`tab  cursor-pointer ${currentNavbarTab==="chats"&&"tab-active"} delay-100`}>Chats</a> 
+            <a
+            onClick={()=>setCurrentNavbarTab("fork")}
+             className={`tab cursor-pointer ${currentNavbarTab==="fork"&&"tab-active"} delay-100`}>Fork</a> 
+          </div>
+          </div>
+          <div className="overflow-y-auto h-[25rem] mt-5 ">
+          {currentNavbarTab==="chats"?(
+            <UserChats/>
+          ):(
+            <UserForkChats/>
+          )}
+          </div>
 
           <UserProfile />
         </ul>
