@@ -1,5 +1,12 @@
+import style from '../markdown-styles.module.css'
 import { useState, useEffect, useRef } from "react";
+
+import ReactDom from 'react-dom'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+
 import { OpenAIExt } from "openai-ext";
+
 
 import NavBar from "../component/chat/NavBar";
 import UserProfile, { ApiModal } from "../component/chat/UserProfile";
@@ -75,7 +82,7 @@ const Chat = () => {
         ...chats,
           {
             role: "system",
-            content: "You are a good assistant. Return all the result in the html tags",
+            content: "You are a good assistant. Return all the result in the markdown.",
           },
           {
             role: "user",
@@ -119,9 +126,11 @@ const Chat = () => {
                       <img src="./man.jpeg" />
                     </div>
                   </div>
-                  <h1 className={`grow text-md text-white lg:pr-10  `}>
-                    {chat.content}
-                  </h1>
+                  <div className={` ${chat['role']==="assistant"&&"text-white"} lg:pr-10 flex flex-col gap-5`}>
+                  <ReactMarkdown
+                  className={style.reactMarkDown}
+                   children={chat.content} remarkPlugins={[remarkGfm]} />
+                  </div>
                 </div>
               </div>
               <div
@@ -142,7 +151,11 @@ const Chat = () => {
               <img src="./man.jpeg" />
             </div>
           </div>
-          <h1 className="grow text-md text-white lg:pr-10 ">{currentChat}</h1>
+          <div className={`lg:pr-10 flex flex-col gap-5 text-white`}>
+                  <ReactMarkdown 
+                  className={style.reactMarkDown}
+                  children={currentChat} remarkPlugins={[remarkGfm]} />
+          </div>
         </div>
         )}
 
