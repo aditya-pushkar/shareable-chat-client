@@ -8,17 +8,14 @@ import remarkGfm from 'remark-gfm'
 import { OpenAIExt } from "openai-ext";
 
 
-import NavBar from "../component/chat/NavBar";
-import UserProfile, { ApiModal } from "../component/chat/UserProfile";
-import CreateChat from "../component/chat/CreateChat";
-import UserChats from "../component/chat/UserChats";
-import UserForkChats from "../component/chat/UserForkChats";
+import NavBar from "../components/chat/NavBar";
+import UserProfile, { ApiModal } from "../components/chat/UserProfile";
+import CreateChat from "../components/chat/CreateChat";
+import UserChatsTab from '../components/chat/UserChatsTab';
 
-import Loading from "../component/chat/Loading";
 
 
 const Chat = () => {
-  const [currentNavbarTab, setCurrentNavbarTab] = useState("chats");
   const [chats, setChats] = useState([]);
   const [currentChat, setCurrentChat] = useState("");
   const [isApiCalled, setIsApiCalled] = useState(false);
@@ -41,7 +38,7 @@ const Chat = () => {
         onContent(content, isFinal, xhr) {
           // setIsStreaming(true)
           setCurrentChat(content)
-          console.log(content, "isFinal?", isFinal);
+          // console.log(content, "isFinal?", isFinal);
           if(isFinal){
             setChats((chats) => [
               ...chats,
@@ -96,7 +93,7 @@ const Chat = () => {
     return setIsApiCalled(true);
   };
 
-  // console.log(chats)
+  console.log(chats)
 
   return (
     <div className="drawer drawer-mobile">
@@ -120,13 +117,13 @@ const Chat = () => {
                     : "bg-primary bg-opacity-50"
                 }`}
               >
-                <div className={`flex flex-row gap-5 leading-relaxed `}>
+                <div className={`flex flex-row gap-5 leading-8 `}>
                   <div className="avatar z-0 ">
                     <div className="w-10 h-10 md:h-8 md:w-8 rounded-xl">
                       <img src="./man.jpeg" />
                     </div>
                   </div>
-                  <div className={` ${chat['role']==="assistant"&&"text-white"} lg:pr-10 flex flex-col gap-5`}>
+                  <div className={` ${chat['role']==="assistant"&&"text-white"} lg:pr-10 flex flex-col gap-5 relative`}>
                   <ReactMarkdown
                   className={style.reactMarkDown}
                    children={chat.content} remarkPlugins={[remarkGfm]} />
@@ -173,6 +170,7 @@ const Chat = () => {
               onClick={() => handleSubmit()}
               type="submit"
               className="btn btn-ghost btn-circle"
+              disabled={isApiCalled||!inputText?true:false}
             >
               <i className="ri-send-plane-fill ri-xl"></i>
             </button>
@@ -189,29 +187,7 @@ const Chat = () => {
             </h1>
           </div>
 
-          <div className="flex flex-col items-center ">
-            <div className="tabs tabs-boxed ">
-              <a
-                onClick={() => setCurrentNavbarTab("chats")}
-                className={`tab  cursor-pointer ${
-                  currentNavbarTab === "chats" && "tab-active"
-                } delay-75`}
-              >
-                Chats
-              </a>
-              <a
-                onClick={() => setCurrentNavbarTab("fork")}
-                className={`tab cursor-pointer ${
-                  currentNavbarTab === "fork" && "tab-active"
-                } delay-75 `}
-              >
-                Fork
-              </a>
-            </div>
-          </div>
-          <div className="overflow-y-auto h-[25rem] mt-5 ">
-            {currentNavbarTab === "chats" ? <UserChats /> : <UserForkChats />}
-          </div>
+         <UserChatsTab/>
 
           <UserProfile />
         </ul>
