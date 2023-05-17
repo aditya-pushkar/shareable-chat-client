@@ -125,7 +125,7 @@ const Chat = () => {
                       <img src="./man.jpeg" />
                     </div>
                   </div>
-                  <div className={` ${chat['role']==="assistant"&&"text-white"} lg:pr-10 flex flex-col gap-5 relative`}>
+                  <div className={` ${chat['role']==="assistant"&&"text-white"} lg:pr-10 flex flex-col gap-5 relative `}>
                   <ReactMarkdown
                   className={style.reactMarkDown}
                    children={chat.content} remarkPlugins={[remarkGfm]} />
@@ -143,7 +143,7 @@ const Chat = () => {
         </div>
         {isApiCalled&&currentChat&&(
           <div
-          className={`flex flex-row gap-5 leading-relaxed w-full px-8 py-5 bg-primary bg-opacity-50 mb-28`}
+          className={`flex flex-row gap-5  w-full px-8 py-5 bg-primary bg-opacity-50 mb-28 leading-8 `}
         >
           <div className="avatar z-0 ">
             <div className="w-10 h-10 md:h-8 md:w-8 rounded-xl">
