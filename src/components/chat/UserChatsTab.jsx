@@ -59,23 +59,16 @@ const UserChatsTab = () => {
                 onClick={() => setCurrentNavbarTab("chats")}
                 className={`tab  cursor-pointer ${
                   currentNavbarTab === "chats" && "tab-active"
-                } delay-75 text-xs`}
+                } delay-75`}
               >
                 Chats
               </a>
-              <a
-                onClick={() => setCurrentNavbarTab("private")}
-                className={`tab cursor-pointer ${
-                  currentNavbarTab === "private" && "tab-active"
-                } delay-75 text-xs`}
-              >
-                Private
-              </a>
+
               <a
                 onClick={() => setCurrentNavbarTab("fork")}
                 className={`tab cursor-pointer ${
                   currentNavbarTab === "fork" && "tab-active"
-                } delay-75 text-xs`}
+                } delay-75 `}
               >
                 Fork
               </a>

@@ -30,12 +30,9 @@ const NavBar = () => {
           </a>
         </div>
         <div className="navbar-end">
-          <button className="btn btn-ghost btn-circle">
-            <label htmlFor="create-chat-modal" className="ri-add-line ri-xl cursor-pointer "></label>
-          </button>
-          <button className="btn btn-ghost btn-circle">
-            <i className="ri-share-forward-fill ri-xl"></i>
-          </button>
+            <label htmlFor="create-chat-modal" className="btn btn-ghost btn-circle ri-add-line text-2xl cursor-pointer "></label>
+            <label htmlFor="share-chat-modal" className=" btn btn-ghost btn-circle ri-share-forward-fill text-2xl cursor-pointer"></label>
+
         </div>
       </div>
     );

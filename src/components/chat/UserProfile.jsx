@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 
-export const ApiModal = () => {
+export const APIModal = () => {
   const [apiKey, setApiKey] = useState(null)
 return (
   <>

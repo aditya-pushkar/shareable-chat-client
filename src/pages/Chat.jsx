@@ -9,8 +9,9 @@ import { OpenAIExt } from "openai-ext";
 
 
 import NavBar from "../components/chat/NavBar";
-import UserProfile, { ApiModal } from "../components/chat/UserProfile";
+import UserProfile, { APIModal } from "../components/chat/UserProfile";
 import CreateChat from "../components/chat/CreateChat";
+import ShareChat from '../components/chat/ShareChat';
 import UserChatsTab from '../components/chat/UserChatsTab';
 
 
@@ -98,7 +99,8 @@ const Chat = () => {
   return (
     <div className="drawer drawer-mobile">
       <CreateChat />
-      <ApiModal />
+      <APIModal />
+      <ShareChat/>
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col items-center ">
         <div className="absolute top-0  w-full  left-0 right-0 z-50">
