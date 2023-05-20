@@ -97,7 +97,6 @@ export const AuthContextProvider = ({children}) => {
         // signInWithRedirect(auth, provider)
     };
 
-    console.log("Token", authToken)
     
     const logOut = () => {
       setUser(null)
@@ -105,6 +104,7 @@ export const AuthContextProvider = ({children}) => {
         signOut(auth)
     };
 
+    console.log(user)
 
     return (
         <AuthContext.Provider value={{ googleSignIn, logOut, user, authToken}}>

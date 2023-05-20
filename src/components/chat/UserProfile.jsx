@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import { UserAuth } from '../../context/AuthContext'
 
 export const APIModal = () => {
   const [apiKey, setApiKey] = useState(null)
@@ -41,6 +42,7 @@ return (
 
 
 const UserProfile = () => {
+  const {user} = UserAuth()
   return (
     <>
     <div className="btm-nav bg-primary px-2 py-1 ">
@@ -48,11 +50,11 @@ const UserProfile = () => {
               tabIndex={0}
               className="dropdown dropdown-top flex flex-row justify-center items-center hover:bg-primary-focus rounded-lg delay-100 px-1"
             >
-              <div className="w-16 mask mask-squircle">
-                <img src="./man.jpeg" />
+              <div className="w-9 mask mask-squircle ">
+                <img src={user.photoURL} alt="User pfp"/>
               </div>
               <h1 className="text-base text-primary-content font-medium grow">
-                Aditya Pushkar
+                {user.displayName}
               </h1>
               <i className="ri-more-line ri-xl"></i>
 
