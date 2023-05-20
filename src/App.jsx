@@ -12,7 +12,9 @@ function App() {
             <AuthContextProvider>
             <Routes>
                 <Route path="/" element={<LandingPage/>}/>
-                <Route path="/chat" element={<ProtectedRoute><Chat/></ProtectedRoute>}/>
+                <Route path="/chat" element={<ProtectedRoute><Chat/></ProtectedRoute>}>
+                    <Route path=":chatId"/>
+                </Route>
             </Routes>
             </AuthContextProvider>
         </div>
