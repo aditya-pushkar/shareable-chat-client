@@ -23,6 +23,7 @@ const Chat = () => {
   const [chats, setChats] = useState([]);
   const [currentChat, setCurrentChat] = useState("");
   const [chatTitle, setChatTitle] = useState("")
+  const [isChatPublic, setIsChatPublic] = useState(false)
   const [isApiCalled, setIsApiCalled] = useState(false);
   const [inputText, setInputText] = useState("");
 
@@ -58,6 +59,7 @@ const Chat = () => {
         if(response.status===200){
           setChats(response.data.chats)
           setChatTitle(response.data.title)
+          setIsChatPublic(response.data.is_public)
         }
       })
       .catch(function (error) {
@@ -144,7 +146,7 @@ const Chat = () => {
     <div className="drawer drawer-mobile">
       <CreateChat />
       <APIModal />
-      <ShareChat/>
+      <ShareChat chatId={chatId}/>
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col items-center ">
         <div className="absolute top-0  w-full  left-0 right-0 z-50">

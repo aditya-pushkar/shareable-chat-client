@@ -1,7 +1,65 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
+import axios from "axios";
 
-const ShareChat = () => {
-    const [isPublic, setIsPublic] = useState(false)
+import { UserAuth } from "../../context/AuthContext";
+import BASE_URL from "../../BASE_URL";
+
+const ShareChat = ({chatId}) => {
+  const [isPublic, setIsPublic] = useState(false)
+  const [isQuerySubmitting, setIsQuerySubmitting] = useState(false)
+
+  const {authToken} = UserAuth()
+
+  useEffect(()=>{
+    fetchChatData()
+  }, [chatId])
+
+  const handleSubmit = () => {
+    share()
+  }
+  
+
+  const fetchChatData = () => {
+    axios
+    .get(`${BASE_URL}/chats/detail/${chatId}`,{
+      headers: {
+        'Content-Type': 'Application/json',
+        'Authorization': `token ${authToken}`
+      },
+    }).then(function (response) {
+      if(response.status===200){
+        setIsPublic(response.data.is_public)
+        
+      }
+    })
+    .catch(function (error) {
+      console.error(error)
+    });
+  }
+
+  const share = () => {
+    setIsQuerySubmitting(true)
+    const payload =  {
+      "chat_id" :chatId,
+    }
+    axios
+      .post(`${BASE_URL}/chats/share?share=${isPublic?false:true}`, payload, {
+        headers: {
+          'Content-Type': 'Application/json',
+          'Authorization': `token ${authToken}`
+        }
+      }).then(function (response) {
+        if(response.status===200){
+          setIsPublic(isPublic?false:true)
+          setIsQuerySubmitting(false)
+        }
+      })
+      .catch(function (error) {
+        console.error(error)
+      });
+  }
+
+
   return (
     <>
       <input type="checkbox" id="share-chat-modal" className="modal-toggle" />
@@ -17,12 +75,13 @@ const ShareChat = () => {
 
           <div className=" gap-5 mt-7 items-center ">
             <div className="form-control w-full bg-base-200 px-3 py-2">
-              <label className="cursor-pointer label">
+              <label className="cursor-pointer label" >
                 <span className="label-text ">
                   Share your chat to the public
                 </span>
                 <input
-                onClick={()=>isPublic?setIsPublic(false):setIsPublic(true)}
+                disabled={isQuerySubmitting?true:false}
+                onClick={handleSubmit}
                   type="checkbox"
                   className="toggle toggle-accent"
                   checked={isPublic}
