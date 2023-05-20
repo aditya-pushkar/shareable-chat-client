@@ -1,6 +1,6 @@
 import React from 'react'
 
-const NavBar = () => {
+const NavBar = ({title}) => {
     return (
       <div className="navbar bg-base-100 border-b border-base-200 z-50 ">
         <div className="navbar-start  ">
@@ -26,7 +26,7 @@ const NavBar = () => {
         </div>
         <div className="navbar-center  text-base md:text-lg max-w-prose ">
           <a className="font-medium tracking-wide text-white ">
-            How to live on a mars...
+            {title}...
           </a>
         </div>
         <div className="navbar-end">
