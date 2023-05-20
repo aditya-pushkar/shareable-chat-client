@@ -3,8 +3,9 @@ import { Routes, Route } from "react-router-dom";
 import { AuthContextProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-import Chat from "./pages/Chat"
 import LandingPage from "./pages/LandingPage";
+import Chat from "./pages/Chat"
+import SharedChat from "./pages/SharedChatPage";
 
 function App() {
     return (
@@ -15,6 +16,7 @@ function App() {
                 <Route path="/chat" element={<ProtectedRoute><Chat/></ProtectedRoute>}>
                     <Route path=":chatId"/>
                 </Route>
+                <Route path="/p/:chatId" element={<SharedChat/>}/>
             </Routes>
             </AuthContextProvider>
         </div>
