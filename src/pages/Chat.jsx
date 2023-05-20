@@ -1,12 +1,15 @@
 import style from '../markdown-styles.module.css'
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect} from "react";
+import { useParams } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
+import axios from "axios";
 
-import ReactDom from 'react-dom'
-import ReactMarkdown from 'react-markdown'
+
 import remarkGfm from 'remark-gfm'
-
 import { OpenAIExt } from "openai-ext";
 
+import BASE_URL from '../BASE_URL';
+import { UserAuth } from '../context/AuthContext';
 
 import NavBar from "../components/chat/NavBar";
 import UserProfile, { APIModal } from "../components/chat/UserProfile";
@@ -19,14 +22,70 @@ import UserChatsTab from '../components/chat/UserChatsTab';
 const Chat = () => {
   const [chats, setChats] = useState([]);
   const [currentChat, setCurrentChat] = useState("");
+  const [chatTitle, setChatTitle] = useState("")
   const [isApiCalled, setIsApiCalled] = useState(false);
   const [inputText, setInputText] = useState("");
+
+  const {user, authToken} = UserAuth();
+
+  let { chatId } = useParams();
 
   useEffect(() => {
     if (chats && isApiCalled) {
       handleSubmitionWithPreviousConvo(chats);
     }
   }, [chats]);
+
+  useEffect(()=>{
+    if(chatId) {
+    fetchChatData()
+    }
+  },[chatId])
+
+  useEffect(()=>{
+    if(chats.length!==0)
+    SaveChats()
+  }, [chats])
+
+  const fetchChatData = () => {
+    axios
+      .get(`${BASE_URL}/chats/detail/${chatId}`,{
+        headers: {
+          'Content-Type': 'Application/json',
+          'Authorization': `token ${authToken}`
+        },
+      }).then(function (response) {
+        if(response.status===200){
+          setChats(response.data.chats)
+          setChatTitle(response.data.title)
+        }
+      })
+      .catch(function (error) {
+        console.error(error)
+      });
+  }
+
+  const SaveChats = () => {
+    console.log("saving chat data in backend")
+    const payload =  {
+      "chat_id" :chatId,
+      "chats": chats
+    }
+    axios
+      .patch(`${BASE_URL}/chats/update/`, payload, {
+        headers: {
+          'Content-Type': 'Application/json',
+          'Authorization': `token ${authToken}`
+        }
+      }).then(function (response) {
+        if(response.status===200){
+          console.log("data saved in backend ")
+        }
+      })
+      .catch(function (error) {
+        console.error(error)
+      });
+  }
 
   // chats  = [{id: qeeer, gptContent: {}}]
   const handleSubmitionWithPreviousConvo = async (convo) => {
@@ -75,26 +134,11 @@ const Chat = () => {
   const handleSubmit = () => {
     // Add server busy erro handling
     if (!inputText) return alert("Please add the input text");
-    if (chats.length === 0) {
-      setChats((chats) => [
-        ...chats,
-          {
-            role: "system",
-            content: "You are a good assistant. Return all the result in the markdown.",
-          },
-          {
-            role: "user",
-            content: inputText,
-          }
-      ]);
-    } else {
-      setChats((chats) => [...chats, {role: "user", content: inputText }]);
-    }
+    setChats((chats) => [...chats, {role: "user", content: inputText }]);
     setInputText("");
     return setIsApiCalled(true);
   };
 
-  console.log(chats)
 
   return (
     <div className="drawer drawer-mobile">
@@ -104,7 +148,7 @@ const Chat = () => {
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col items-center ">
         <div className="absolute top-0  w-full  left-0 right-0 z-50">
-          <NavBar />
+          <NavBar title={chatTitle}/>
         </div>
         {/* <!-- Page content here --> */}
         <div className="flex  flex-col w-full mt-16  ">
@@ -122,7 +166,7 @@ const Chat = () => {
                 <div className={`flex flex-row gap-5 leading-8 `}>
                   <div className="avatar z-0 ">
                     <div className="w-10 h-10 md:h-8 md:w-8 rounded-xl">
-                      <img src="./man.jpeg" />
+                      <img src={chat.role==="user"? `${user.photoURL}`: "../chatgpt-logo.webp" }/>
                     </div>
                   </div>
                   <div className={` ${chat['role']==="assistant"&&"text-white"} lg:pr-10 flex flex-col gap-5 relative `}>
@@ -147,7 +191,7 @@ const Chat = () => {
         >
           <div className="avatar z-0 ">
             <div className="w-10 h-10 md:h-8 md:w-8 rounded-xl">
-              <img src="./man.jpeg" />
+              <img src="../chatgpt-logo.webp"  />
             </div>
           </div>
           <div className={`lg:pr-10 flex flex-col gap-5 text-white`}>
