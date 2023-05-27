@@ -25,9 +25,11 @@ const NavBar = ({title}) => {
           </label>
         </div>
         <div className="navbar-center  text-base md:text-lg max-w-prose ">
-          <a className="font-medium tracking-wide text-white ">
+          {title&&(
+            <a className="font-medium tracking-wide text-white ">
             {title}...
           </a>
+          )}
         </div>
         <div className="navbar-end">
             <label htmlFor="create-chat-modal" className="btn btn-ghost btn-circle ri-add-line text-2xl cursor-pointer "></label>
